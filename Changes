@@ -1,0 +1,7 @@
+Revision history for CPAN-Uploader
+
+0.002     2008-06-06
+          refactored code further, added upload script (not installed)
+
+0.001     2008-06-06
+          first release

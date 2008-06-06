@@ -1,14 +1,28 @@
 #!perl
 use strict;
 use warnings;
+use Carp;
 use CPAN::Uploader;
+use File::Spec;
 
-$ENV{CPAN_UPLOADER_DEBUG} = 1;
+my $home = $ENV{HOME} || '.';
+my $rc   = File::Spec->catfile($home, '.pause');
+
+open my $pauserc, '<', $rc or die "can't open $rc for reading: $!";
+
+my %arg;
+while (<$pauserc>) {
+  chomp;
+  next unless $_ and $_ !~ /^\s*#/;
+
+  my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
+  croak "multiple enties for $k" if $arg{$k};
+  $arg{$k} = $v;
+}
+
+croak "usage: cpan-upload FILE\n" unless my $file = $ARGV[0];
 
 CPAN::Uploader->upload_file(
-  $ARGV[0],
-  {
-    user     => $ARGV[1],
-    password => $ARGV[2],
-  },
+  $file,
+  \%arg,
 );
