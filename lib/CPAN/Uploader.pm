@@ -2,7 +2,6 @@ use strict;
 use warnings;
 package CPAN::Uploader;
 # ABSTRACT: upload things to the CPAN
-our $VERSION = '0.001';
 
 =head1 WARNING
 
@@ -34,7 +33,7 @@ use LWP::UserAgent;
 =cut
 
 sub log   { shift; print "$_\n" for @_ }
-sub debug { return unless $ENV{CPAN_UPLOAD_DEBUG}; shift->log(@_) }
+sub debug { return unless $ENV{CPAN_UPLOADER_DEBUG}; shift->log(@_) }
 
 my $PAUSE_ADD_URI = 'http://pause.perl.org/pause/authenquery';
 

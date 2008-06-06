@@ -1,0 +1,14 @@
+#!perl
+use strict;
+use warnings;
+use CPAN::Uploader;
+
+$ENV{CPAN_UPLOADER_DEBUG} = 1;
+
+CPAN::Uploader->upload_file(
+  $ARGV[0],
+  {
+    user     => $ARGV[1],
+    password => $ARGV[2],
+  },
+);
