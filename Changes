@@ -1,5 +1,8 @@
 Revision history for CPAN-Uploader
 
+0.004     2008-10-24
+          add URI prereq
+
 0.003     2008-06-08
           make cpan-upload install
 
