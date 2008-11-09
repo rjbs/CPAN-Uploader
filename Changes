@@ -1,5 +1,8 @@
 Revision history for CPAN-Uploader
 
+0.005     2008-11-09
+          handle but ignore -verbose to work with Module::Install
+
 0.004     2008-10-24
           add URI prereq
 

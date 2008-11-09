@@ -20,6 +20,55 @@ while (<$pauserc>) {
   $arg{$k} = $v;
 }
 
+=begin opts
+
+These are the options from cpan-upload dist, not from this program.
+
+-user <string>
+
+    Your PAUSE username (which you previously registered with PAUSE).
+-password <string>
+
+    The password for your PAUSE username.
+-directory <string> | -dir <string>
+
+    A subdirectory in your CPAN area where the file should be uploaded to.
+-mailto <email>
+
+    Your email address, to include the HTTP request header. This is also used as the password for the ftp upload to PAUSE.
+-ftp_gateway <host>
+
+    Specifies the name of the host which has your ftp gateway.
+-ftp_proxy <host>
+
+    Specifies the name of the host which has your ftp proxy, if you're behind a firewall.
+-http_proxy <URL>
+
+    Specifies the URL for a proxy to use when making HTTP requests.
+-non_interactive | -ni
+
+    cpan-upload should not prompt for any missing information (eg password), it should just warn or die, as appropriate.
+-help
+
+    Displays a short help message with the OPTIONS section from the cpan-upload documentation.
+-doc
+
+    Display the full documentation for cpan-upload.
+-verbose
+
+    Turns on verbose information as the script runs.
+-debug
+
+    Turns on debugging information. Useful mainly for the developer, it displays the HTTP request and response.
+-version
+
+    Display the version number of the cpan-upload script.
+
+=end opts
+
+=cut
+
+shift @ARGV if $ARGV[0] eq '-verbose';
 croak "usage: cpan-upload FILE\n" unless my $file = $ARGV[0];
 
 CPAN::Uploader->upload_file(
