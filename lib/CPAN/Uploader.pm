@@ -26,9 +26,9 @@ my $PAUSE_ADD_URI = 'http://pause.perl.org/pause/authenquery';
 
 =method upload_file
 
-  CPAN::Uploader->upload_file($file);
+  CPAN::Uploader->upload_file($file, \%arg);
 
-  $uploader->upload_file($file, \%arg);
+  $uploader->upload_file($file);
 
 Valid arguments are:
 
@@ -45,8 +45,12 @@ raise an exception on error.
 sub upload_file {
   my ($self, $file, $arg) = @_;
 
-  Carp::confess("don't supply %arg when calling upload_file on an object")
+  Carp::confess(q{don't supply %arg when calling upload_file on an object})
     if $arg and ref $self;
+
+  # class call with no args is no good
+  Carp::confess(q{need to supply %arg when calling upload_file from the class})
+    if not ( ref $self ) and not $arg;
 
   $self = $self->new($arg) if $arg;
 
