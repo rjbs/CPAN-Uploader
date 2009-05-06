@@ -13,6 +13,17 @@ my %arg;
 my $home = $ENV{HOME} || '.';
 my $rc   = File::Spec->catfile($home, '.pause');
 
+# Process .pause
+open my $pauserc, '<', $rc or die "can't open $rc for reading: $!";
+
+while (<$pauserc>) {
+  chomp;
+  next unless $_ and $_ !~ /^\s*#/;
+
+  my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
+  croak "multiple enties for $k" if $arg{$k};
+  $arg{$k} = $v;
+}
 
 # Process arguments
 my ($opts, $usage) = describe_options(
@@ -31,17 +42,7 @@ $arg{dry_run} = 1 if $opts->{dry_run};
 $arg{debug} = 1 if $opts->{verbose};
 
 
-# Process .pause
-open my $pauserc, '<', $rc or die "can't open $rc for reading: $!";
 
-while (<$pauserc>) {
-  chomp;
-  next unless $_ and $_ !~ /^\s*#/;
-
-  my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
-  croak "multiple enties for $k" if $arg{$k};
-  $arg{$k} = $v;
-}
 
 =begin opts
 
