@@ -5,9 +5,24 @@ use Carp;
 use CPAN::Uploader;
 use File::Spec;
 
+use Getopt::Long::Descriptive;
+$Getopt::Long::Descriptive::MungeOptions = 1;
+
 my $home = $ENV{HOME} || '.';
 my $rc   = File::Spec->catfile($home, '.pause');
 
+
+# Process arguments
+my ($opts, $usage) = describe_options(
+	"usage: %c [options] file-to-upload",
+	( 
+		[ "verbose|v" => "Verbose logging (currently does nothing)" ],
+	),
+);
+die "Please provide a file name.\n".$usage unless my $file = $ARGV[0];
+
+
+# Process .pause
 open my $pauserc, '<', $rc or die "can't open $rc for reading: $!";
 
 my %arg;
@@ -68,8 +83,6 @@ These are the options from cpan-upload dist, not from this program.
 
 =cut
 
-shift @ARGV if $ARGV[0] eq '-verbose';
-croak "usage: cpan-upload FILE\n" unless my $file = $ARGV[0];
 
 CPAN::Uploader->upload_file(
   $file,
