@@ -8,6 +8,8 @@ use File::Spec;
 use Getopt::Long::Descriptive;
 $Getopt::Long::Descriptive::MungeOptions = 1;
 
+my %arg;
+
 my $home = $ENV{HOME} || '.';
 my $rc   = File::Spec->catfile($home, '.pause');
 
@@ -16,16 +18,22 @@ my $rc   = File::Spec->catfile($home, '.pause');
 my ($opts, $usage) = describe_options(
 	"usage: %c [options] file-to-upload",
 	( 
-		[ "verbose|v" => "Verbose logging (currently does nothing)" ],
+		[ "verbose|v" => "Verbose logging" ],
+		[ "help|h"    => "This help message" ],
+		[ "dry-run"   => "Do not upload anything." ], 
 	),
 );
+
+die $usage if $opts->{help};
 die "Please provide a file name.\n".$usage unless my $file = $ARGV[0];
+
+$arg{dry_run} = 1 if $opts->{dry_run};
+$arg{debug} = 1 if $opts->{verbose};
 
 
 # Process .pause
 open my $pauserc, '<', $rc or die "can't open $rc for reading: $!";
 
-my %arg;
 while (<$pauserc>) {
   chomp;
   next unless $_ and $_ !~ /^\s*#/;

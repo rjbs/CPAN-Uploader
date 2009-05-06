@@ -42,6 +42,7 @@ raise an exception on error.
 
 =cut
 
+use Data::Dumper;
 sub upload_file {
   my ($self, $file, $arg) = @_;
 
@@ -53,6 +54,19 @@ sub upload_file {
     if not ( ref $self ) and not $arg;
 
   $self = $self->new($arg) if $arg;
+
+  if($arg->{dry_run}) {
+    $self->log("By request, cowardly refusing to do anything at all.");
+    $self->log("The following arguments would be used to upload: \n"."\$arg: ".Dumper($arg)."\$file: ".Dumper($file)); 
+  } else {
+    $self->_upload($arg, $file);
+  }
+}
+
+sub _upload {
+  my $self = shift;
+  my $arg  = shift;
+  my $file = shift;
 
   $self->log("registering upload with PAUSE web server");
 
@@ -112,6 +126,7 @@ sub upload_file {
     $self->log("PAUSE add message sent ok [" . $response->code . "]");
   }
 }
+
 
 =method new
 
