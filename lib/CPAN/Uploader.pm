@@ -32,10 +32,11 @@ my $PAUSE_ADD_URI = 'http://pause.perl.org/pause/authenquery';
 
 Valid arguments are:
 
-  user     - (required) your CPAN / PAUSE id
-  password - (required) your CPAN / PAUSE password
-  subdir   - the directory (under your home directory) to upload to
-  debug    - if set to true, spew lots more debugging output
+  user       - (required) your CPAN / PAUSE id
+  password   - (required) your CPAN / PAUSE password
+  subdir     - the directory (under your home directory) to upload to
+  http_proxy - url of the http proxy to use 
+  debug      - if set to true, spew lots more debugging output
 
 This method attempts to actually upload the named file to the CPAN.  It will
 raise an exception on error.
