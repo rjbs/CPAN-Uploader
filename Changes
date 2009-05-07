@@ -1,5 +1,9 @@
 Revision history for CPAN-Uploader
 
+
+0.091270  2009-05-07
+          refactor internals, improve options handling, --dry-run (sungo)
+
 0.005     2008-11-09
           handle but ignore -verbose to work with Module::Install
 
