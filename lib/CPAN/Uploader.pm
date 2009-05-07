@@ -52,54 +52,57 @@ sub upload_file {
 
   # class call with no args is no good
   Carp::confess(q{need to supply %arg when calling upload_file from the class})
-    if not ( ref $self ) and not $arg;
+    if not (ref $self) and not $arg;
 
   $self = $self->new($arg) if $arg;
 
   if($arg->{dry_run}) {
-    $self->log("By request, cowardly refusing to do anything at all.");
-    $self->log("The following arguments would be used to upload: \n"."\$arg: ".Dumper($arg)."\$file: ".Dumper($file)); 
+    $self->_log("By request, cowardly refusing to do anything at all.");
+    $self->_log(
+      "The following arguments would have been used to upload: \n"
+      . '$self: ' . Dumper($self)
+      . '$file: ' . Dumper($file)
+    ); 
   } else {
-    $self->_upload($arg, $file);
+    $self->_upload($file);
   }
 }
 
 sub _upload {
   my $self = shift;
-  my $arg  = shift;
   my $file = shift;
 
-  $self->log("registering upload with PAUSE web server");
+  $self->_log("registering upload with PAUSE web server");
 
   my $agent = LWP::UserAgent->new;
   $agent->agent($self . q{/} . $self->VERSION);
 
-  $agent->proxy(http => $arg->{http_proxy}) if $arg->{http_proxy};
+  $agent->proxy(http => $self->{http_proxy}) if $self->{http_proxy};
 
   my $request = POST(
     $PAUSE_ADD_URI,
     Content_Type => 'form-data',
     Content      => {
-      HIDDENNAME                        => $arg->{user},
+      HIDDENNAME                        => $self->{user},
       CAN_MULTIPART                     => 1,
       pause99_add_uri_upload            => File::Basename::basename($file),
       SUBMIT_pause99_add_uri_httpupload => " Upload this file from my disk ",
       pause99_add_uri_uri               => "",
       pause99_add_uri_httpupload        => [ $file ],
-      ($arg->{subdir} ? (pause99_add_uri_subdirtext => $arg->{subdir}) : ()),
+      ($self->{subdir} ? (pause99_add_uri_subdirtext => $self->{subdir}) : ()),
     },
   );
 
-  $request->authorization_basic($arg->{user}, $arg->{password});
+  $request->authorization_basic($self->{user}, $self->{password});
 
-  $self->debug(
+  $self->_debug(
     "----- REQUEST BEGIN -----" .
     $request->as_string .
     "----- REQUEST END -------"
   );
 
   # Make the request to the PAUSE web server
-  $self->log("POSTing upload for $file");
+  $self->_log("POSTing upload for $file");
   my $response = $agent->request($request);
 
   # So, how'd we do?
@@ -118,13 +121,13 @@ sub _upload {
         "\n  Message: ", $response->message, "\n";
     }
   } else {
-    $self->debug(
+    $self->_debug(
       "Looks OK!",
       "----- RESPONSE BEGIN -----",
       $response->as_string,
       "----- RESPONSE END -------"
     );
-    $self->log("PAUSE add message sent ok [" . $response->code . "]");
+    $self->_log("PAUSE add message sent ok [" . $response->code . "]");
   }
 }
 
@@ -147,30 +150,15 @@ sub new {
   bless $arg => $class;
 }
 
-=method log
-
-  $uploader->log($message);
-
-This method logs the given message by printing it to the selected output
-handle.
-
-=method debug
-
-  $uploader->debug($message);
-
-This method logs the given message if the uploader is in debugging mode.
-
-=cut
-
-sub log {
+sub _log {
   shift;
   print "$_[0]\n"
 }
 
-sub debug {
+sub _debug {
   my ($self) = @_;
   return unless $self->{debug};
-  $self->log($_[0]);
+  $self->_log($_[0]);
 }
 
 1;
