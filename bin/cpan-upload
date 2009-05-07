@@ -29,25 +29,29 @@ while (<$pauserc>) {
 my ($opts, $usage) = describe_options(
 	"usage: %c [options] file-to-upload",
 	( 
-		[ "verbose|v" => "Verbose logging" ],
-		[ "help|h"    => "This help message" ],
-		[ "dry-run"   => "Do not upload anything." ], 
+		[ "verbose|v" => "enable verbose logging" ],
+		[ "help|h"    => "display this help message" ],
+		[ "dry-run"   => "do not actually upload anything" ], 
 		[],
-		[ "user|u=s"    => "Your PAUSE username (which was previously registered with PAUSE" ],
-		[ "password|p=s" => "The password to your PAUSE account" ],
-		[ "directory|d=s" => "A subdirectory in your CPAN area where the file should be uploaded to" ],
-		[ "http-proxy=s" => "URL of the http proxy to use in uploading" ],
+		[ "user|u=s"      => "your PAUSE username" ],
+		[ "password|p=s"  => "the password to your PAUSE account" ],
+		[ "directory|d=s" => "a dir in your CPAN space in which to put the file" ],
+		[ "http-proxy=s"  => "URL of the http proxy to use in uploading" ],
 	),
 );
 
-die $usage if $opts->{help};
+if ($opts->{help}) {
+  print $usage->text;
+  exit;
+}
+
 die "Please provide a file name.\n".$usage unless my $file = $ARGV[0];
 
-$arg{debug} = 1 if $opts->{verbose};
+$arg{debug}  = 1 if $opts->{verbose};
 $arg{subdir} = $opts->{directory} if defined $opts->{directory};
 
-map { $arg{$_} = $opts->{$_} if defined $opts->{$_} } qw(dry_run user password http-proxy);
-
+$arg{ $_ } = $opts->{ $_ }
+  for grep { defined $opts->{ $_ } } qw(dry_run user password http-proxy);
 
 CPAN::Uploader->upload_file(
   $file,
