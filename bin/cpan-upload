@@ -25,19 +25,22 @@ while (<$pauserc>) {
   $arg{$k} = $v;
 }
 
+# This nonsensical hack is to cope with Module::Install wanting to call
+# cpan-upload -verbose; it should be made to use CPAN::Uploader instead.
+$ARGV[0] = '--verbose' if @ARGV == 2 and $ARGV[0] eq '-verbose';
+
 # Process arguments
 my ($opts, $usage) = describe_options(
 	"usage: %c [options] file-to-upload",
-	( 
-		[ "verbose|v" => "enable verbose logging" ],
-		[ "help|h"    => "display this help message" ],
-		[ "dry-run"   => "do not actually upload anything" ], 
-		[],
-		[ "user|u=s"      => "your PAUSE username" ],
-		[ "password|p=s"  => "the password to your PAUSE account" ],
-		[ "directory|d=s" => "a dir in your CPAN space in which to put the file" ],
-		[ "http-proxy=s"  => "URL of the http proxy to use in uploading" ],
-	),
+
+  [ "verbose|v" => "enable verbose logging" ],
+  [ "help|h"    => "display this help message" ],
+  [ "dry-run"   => "do not actually upload anything" ], 
+  [],
+  [ "user|u=s"      => "your PAUSE username" ],
+  [ "password|p=s"  => "the password to your PAUSE account" ],
+  [ "directory|d=s" => "a dir in your CPAN space in which to put the file" ],
+  [ "http-proxy=s"  => "URL of the http proxy to use in uploading" ],
 );
 
 if ($opts->{help}) {
