@@ -56,6 +56,16 @@ $arg{subdir} = $opts->{directory} if defined $opts->{directory};
 $arg{ $_ } = $opts->{ $_ }
   for grep { defined $opts->{ $_ } } qw(dry_run user password http-proxy);
 
+if (!$arg{password}) {
+  require Term::ReadKey;
+  local $| = 1;
+  print "PAUSE Password: ";
+  Term::ReadKey::ReadMode('noecho');
+  chop($arg{password} = <STDIN>);
+  Term::ReadKey::ReadMode('restore');
+  print "\n";
+}
+
 CPAN::Uploader->upload_file(
   $file,
   \%arg,
