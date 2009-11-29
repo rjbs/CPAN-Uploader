@@ -1,5 +1,8 @@
 Revision history for CPAN-Uploader
 
+{{$NEXT}}
+          prompt for password if none is in config (patch from David Caldwell)
+          re-release to include a META.yml for cpandeps
 
 0.091270  2009-05-07
           refactor internals, improve options handling, --dry-run (sungo)
