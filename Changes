@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.093330  2009-11-29 17:47:16 America/New_York
           prompt for password if none is in config (patch from David Caldwell)
           re-release to include a META.yml for cpandeps
 
