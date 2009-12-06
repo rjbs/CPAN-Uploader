@@ -5,6 +5,36 @@ use Carp;
 use CPAN::Uploader;
 use File::Spec;
 
+=head1 NAME
+
+cpan-upload - upload a distribution to the CPAN
+
+=head1 USAGE
+
+  usage: cpan-upload [options] file-to-upload
+    -v --verbose       enable verbose logging
+    -h --help          display this help message
+    --dry-run          do not actually upload anything
+                     
+    -u --user          your PAUSE username
+    -p --password      the password to your PAUSE account
+    -d --directory     a dir in your CPAN space in which to put the file
+    --http-proxy       URL of the http proxy to use in uploading
+
+=head1 CONFIGURATION
+
+If you have a C<.pause> file in your home directory, it will be checked for a
+username and password.  It should look like this:
+
+  user EXAMPLE
+  password your-secret-password
+
+=head1 SEE ALSO
+
+L<CPAN::Uploader>
+
+=cut
+
 use Getopt::Long::Descriptive;
 $Getopt::Long::Descriptive::MungeOptions = 1;
 
