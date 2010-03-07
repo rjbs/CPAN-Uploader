@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          make the log and log_debug methods public
 
 0.093390  2009-12-05 20:59:51 America/New_York
           include docs on cpan-uploader command

@@ -56,9 +56,9 @@ sub upload_file {
 
   $self = $self->new($arg) if $arg;
 
-  if($arg->{dry_run}) {
-    $self->_log("By request, cowardly refusing to do anything at all.");
-    $self->_log(
+  if ($arg->{dry_run}) {
+    $self->log("By request, cowardly refusing to do anything at all.");
+    $self->log(
       "The following arguments would have been used to upload: \n"
       . '$self: ' . Dumper($self)
       . '$file: ' . Dumper($file)
@@ -72,7 +72,7 @@ sub _upload {
   my $self = shift;
   my $file = shift;
 
-  $self->_log("registering upload with PAUSE web server");
+  $self->log("registering upload with PAUSE web server");
 
   my $agent = LWP::UserAgent->new;
   $agent->agent($self . q{/} . $self->VERSION);
@@ -95,14 +95,14 @@ sub _upload {
 
   $request->authorization_basic($self->{user}, $self->{password});
 
-  $self->_debug(
+  $self->log_debug(
     "----- REQUEST BEGIN -----" .
     $request->as_string .
     "----- REQUEST END -------"
   );
 
   # Make the request to the PAUSE web server
-  $self->_log("POSTing upload for $file");
+  $self->log("POSTing upload for $file");
   my $response = $agent->request($request);
 
   # So, how'd we do?
@@ -121,13 +121,13 @@ sub _upload {
         "\n  Message: ", $response->message, "\n";
     }
   } else {
-    $self->_debug(
+    $self->log_debug(
       "Looks OK!",
       "----- RESPONSE BEGIN -----",
       $response->as_string,
       "----- RESPONSE END -------"
     );
-    $self->_log("PAUSE add message sent ok [" . $response->code . "]");
+    $self->log("PAUSE add message sent ok [" . $response->code . "]");
   }
 }
 
@@ -150,15 +150,32 @@ sub new {
   bless $arg => $class;
 }
 
-sub _log {
+=method log
+
+  $uploader->log($message);
+
+This method logs the given string.  The default behavior is to print it to the
+screen.  The message should not end in a newline, as one will be added as
+needed.
+
+=cut
+
+sub log {
   shift;
   print "$_[0]\n"
 }
 
-sub _debug {
+=method log_debug
+
+This method behaves like C<L</log>>, but only logs the message if the
+CPAN::Uploader is in debug mode.
+
+=cut
+
+sub log_debug {
   my ($self) = @_;
   return unless $self->{debug};
-  $self->_log($_[0]);
+  $self->log($_[0]);
 }
 
 1;
