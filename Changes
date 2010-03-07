@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.100660  2010-03-07 10:49:55 America/New_York
           make the log and log_debug methods public
 
 0.093390  2009-12-05 20:59:51 America/New_York
