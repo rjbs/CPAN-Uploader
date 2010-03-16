@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.100750  2010-03-16 09:29:19 America/New_York
           prompt for password if using -u to specify a user not in config file
 
 0.100660  2010-03-07 10:49:55 America/New_York
