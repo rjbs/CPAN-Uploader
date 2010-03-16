@@ -1,9 +1,11 @@
 #!perl
 use strict;
 use warnings;
+
 use Carp;
 use CPAN::Uploader;
 use File::Spec;
+use Getopt::Long::Descriptive 0.084;
 
 =head1 NAME
 
@@ -35,9 +37,6 @@ L<CPAN::Uploader>
 
 =cut
 
-use Getopt::Long::Descriptive;
-$Getopt::Long::Descriptive::MungeOptions = 1;
-
 my %arg;
 
 my $home = $ENV{HOME} || '.';
@@ -46,13 +45,14 @@ my $rc   = File::Spec->catfile($home, '.pause');
 # Process .pause
 open my $pauserc, '<', $rc or die "can't open $rc for reading: $!";
 
+my %from_file;
 while (<$pauserc>) {
   chomp;
   next unless $_ and $_ !~ /^\s*#/;
 
   my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
-  croak "multiple enties for $k" if $arg{$k};
-  $arg{$k} = $v;
+  croak "multiple enties for $k" if $from_file{$k};
+  $from_file{$k} = $v;
 }
 
 # This nonsensical hack is to cope with Module::Install wanting to call
@@ -60,7 +60,7 @@ while (<$pauserc>) {
 $ARGV[0] = '--verbose' if @ARGV == 2 and $ARGV[0] eq '-verbose';
 
 # Process arguments
-my ($opts, $usage) = describe_options(
+my ($opt, $usage) = describe_options(
 	"usage: %c [options] file-to-upload",
 
   [ "verbose|v" => "enable verbose logging" ],
@@ -73,20 +73,27 @@ my ($opts, $usage) = describe_options(
   [ "http-proxy=s"  => "URL of the http proxy to use in uploading" ],
 );
 
-if ($opts->{help}) {
+if ($opt->help) {
   print $usage->text;
   exit;
 }
 
-die "Please provide a file name.\n".$usage unless my $file = $ARGV[0];
+die "Please provide a file name.\n" . $usage unless my $file = $ARGV[0];
 
-$arg{debug}  = 1 if $opts->{verbose};
-$arg{subdir} = $opts->{directory} if defined $opts->{directory};
+$arg{user} = $opt->_specified('user') ? $opt->user : uc $from_file{user};
 
-$arg{ $_ } = $opts->{ $_ }
-  for grep { defined $opts->{ $_ } } qw(dry_run user password http-proxy);
+$arg{password} = $opt->password if $opt->_specified('password');
 
-if (!$arg{password}) {
+if (! $arg{password} and ($arg{user} eq uc $from_file{user})) {
+  $arg{password} = $from_file{user};
+}
+
+$arg{debug}  = 1 if $opt->verbose;
+$arg{subdir} = $opt->directory if defined $opt->directory;
+
+$arg{ $_ } = $opt->$_ for grep { defined $opt->$_ } qw(dry_run http-proxy);
+
+if (! $arg{password}) {
   require Term::ReadKey;
   local $| = 1;
   print "PAUSE Password: ";
