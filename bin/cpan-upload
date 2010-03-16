@@ -80,18 +80,18 @@ if ($opt->help) {
 
 die "Please provide a file name.\n" . $usage unless my $file = $ARGV[0];
 
-$arg{user} = $opt->_specified('user') ? $opt->user : uc $from_file{user};
+$arg{user} = uc( $opt->_specified('user') ? $opt->user : $from_file{user} );
 
 $arg{password} = $opt->password if $opt->_specified('password');
 
 if (! $arg{password} and ($arg{user} eq uc $from_file{user})) {
-  $arg{password} = $from_file{user};
+  $arg{password} = $from_file{password};
 }
 
 $arg{debug}  = 1 if $opt->verbose;
 $arg{subdir} = $opt->directory if defined $opt->directory;
 
-$arg{ $_ } = $opt->$_ for grep { defined $opt->$_ } qw(dry_run http-proxy);
+$arg{ $_ } = $opt->$_ for grep { defined $opt->$_ } qw(dry_run http_proxy);
 
 if (! $arg{password}) {
   require Term::ReadKey;
