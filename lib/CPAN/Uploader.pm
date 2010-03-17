@@ -174,7 +174,7 @@ CPAN::Uploader is in debug mode.
 =cut
 
 sub log_debug {
-  my ($self) = @_;
+  my $self = shift;
   return unless $self->{debug};
   $self->log($_[0]);
 }

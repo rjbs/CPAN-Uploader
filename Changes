@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          fix internal log_debug to not try logging $self (thanks, Chris
+          Prather)
 
 0.100750  2010-03-16 09:29:19 America/New_York
           prompt for password if using -u to specify a user not in config file
