@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.100760  2010-03-17 12:14:52 America/New_York
           fix internal log_debug to not try logging $self (thanks, Chris
           Prather)
 
