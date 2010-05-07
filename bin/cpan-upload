@@ -2,9 +2,7 @@
 use strict;
 use warnings;
 
-use Carp;
 use CPAN::Uploader;
-use File::Spec;
 use Getopt::Long::Descriptive 0.084;
 
 =head1 NAME
@@ -39,21 +37,7 @@ L<CPAN::Uploader>
 
 my %arg;
 
-my $home = $ENV{HOME} || '.';
-my $rc   = File::Spec->catfile($home, '.pause');
-
-# Process .pause
-open my $pauserc, '<', $rc or die "can't open $rc for reading: $!";
-
-my %from_file;
-while (<$pauserc>) {
-  chomp;
-  next unless $_ and $_ !~ /^\s*#/;
-
-  my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
-  croak "multiple enties for $k" if $from_file{$k};
-  $from_file{$k} = $v;
-}
+my $from_file = CPAN::Uploader->read_config_file;
 
 # This nonsensical hack is to cope with Module::Install wanting to call
 # cpan-upload -verbose; it should be made to use CPAN::Uploader instead.
@@ -80,12 +64,12 @@ if ($opt->help) {
 
 die "Please provide a file name.\n" . $usage unless my $file = $ARGV[0];
 
-$arg{user} = uc( $opt->_specified('user') ? $opt->user : $from_file{user} );
+$arg{user} = uc( $opt->_specified('user') ? $opt->user : $from_file->{user} );
 
 $arg{password} = $opt->password if $opt->_specified('password');
 
-if (! $arg{password} and ($arg{user} eq uc $from_file{user})) {
-  $arg{password} = $from_file{password};
+if (! $arg{password} and ($arg{user} eq uc $from_file->{user})) {
+  $arg{password} = $from_file->{password};
 }
 
 $arg{debug}  = 1 if $opt->verbose;
