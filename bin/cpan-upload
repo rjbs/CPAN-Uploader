@@ -64,11 +64,19 @@ if ($opt->help) {
 
 die "Please provide a file name.\n" . $usage unless my $file = $ARGV[0];
 
-$arg{user} = uc( $opt->_specified('user') ? $opt->user : $from_file->{user} );
+$arg{user} = $opt->_specified('user') ? $opt->user : $from_file->{user};
+
+die "Please provide a value for --user\n" unless defined $arg{user};
+
+$arg{user} = uc $arg{user};
 
 $arg{password} = $opt->password if $opt->_specified('password');
 
-if (! $arg{password} and ($arg{user} eq uc $from_file->{user})) {
+if (
+  ! $arg{password}
+  and defined $from_file->{user}
+  and ($arg{user} eq uc $from_file->{user})
+) {
   $arg{password} = $from_file->{password};
 }
 
