@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.101260  2010-05-06 22:48:37 America/New_York
           move config file reading into CPAN::Uploader and out of the bin
           better error message if no username is provided
           no longer fails if ~/.pauserc is missing
