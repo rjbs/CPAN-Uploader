@@ -70,6 +70,14 @@ sub upload_file {
   }
 }
 
+sub _ua_string {
+  my ($self) = @_;
+  my $class   = ref $self || $self;
+  my $version = $class->VERSION;
+
+  return "$class/$version";
+}
+
 sub _upload {
   my $self = shift;
   my $file = shift;
@@ -77,7 +85,7 @@ sub _upload {
   $self->log("registering upload with PAUSE web server");
 
   my $agent = LWP::UserAgent->new;
-  $agent->agent($self . q{/} . $self->VERSION);
+  $agent->agent( $self->_ua_string );
 
   $agent->proxy(http => $self->{http_proxy}) if $self->{http_proxy};
 
