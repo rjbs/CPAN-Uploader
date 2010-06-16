@@ -1,13 +1,12 @@
 #!perl
 use strict;
 use warnings;
+package
+  cpan_upload;
+# ABSTRACT: upload a distribution to the CPAN
 
 use CPAN::Uploader;
 use Getopt::Long::Descriptive 0.084;
-
-=head1 NAME
-
-cpan-upload - upload a distribution to the CPAN
 
 =head1 USAGE
 

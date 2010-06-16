@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          only print HTTP headers, not body
 
 0.101550  2010-06-04 00:00:50 America/New_York
           minor tweak to the user-agent string sent
