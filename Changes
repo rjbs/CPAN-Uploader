@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.102150  2010-08-03 18:34:27 America/New_York
           allow automatic use of proxy from environment
 
 0.101670  2010-06-16 07:44:32 America/New_York
