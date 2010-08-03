@@ -87,6 +87,7 @@ sub _upload {
   my $agent = LWP::UserAgent->new;
   $agent->agent( $self->_ua_string );
 
+  $agent->env_proxy;
   $agent->proxy(http => $self->{http_proxy}) if $self->{http_proxy};
 
   my $request = POST(

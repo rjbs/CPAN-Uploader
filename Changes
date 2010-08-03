@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          allow automatic use of proxy from environment
 
 0.101670  2010-06-16 07:44:32 America/New_York
           only print HTTP headers, not body
