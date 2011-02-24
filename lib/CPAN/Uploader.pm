@@ -38,6 +38,7 @@ Valid arguments are:
   password   - (required) your CPAN / PAUSE password
   subdir     - the directory (under your home directory) to upload to
   http_proxy - url of the http proxy to use 
+  dpan_url   - the url of a possible DarkPAN to use instead of PAUSE
   debug      - if set to true, spew lots more debugging output
 
 This method attempts to actually upload the named file to the CPAN.  It will
@@ -90,8 +91,10 @@ sub _upload {
   $agent->env_proxy;
   $agent->proxy(http => $self->{http_proxy}) if $self->{http_proxy};
 
+  my $url = $self->{dpan_url} || $PAUSE_ADD_URI;
+
   my $request = POST(
-    $PAUSE_ADD_URI,
+    $url,
     Content_Type => 'form-data',
     Content      => {
       HIDDENNAME                        => $self->{user},
