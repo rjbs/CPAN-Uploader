@@ -3,11 +3,6 @@ use warnings;
 package CPAN::Uploader;
 # ABSTRACT: upload things to the CPAN
 
-=head1 WARNING
-
-  This is really, really not well tested or used yet.  Give it a few weeks, at
-  least.  -- rjbs, 2008-06-06
-
 =head1 ORIGIN
 
 This code is mostly derived from C<cpan-upload-http> by Brad Fitzpatrick, which
@@ -24,7 +19,8 @@ use HTTP::Request::Common qw(POST);
 use HTTP::Status;
 use LWP::UserAgent;
 
-my $PAUSE_ADD_URI = 'http://pause.perl.org/pause/authenquery';
+my $UPLOAD_URI = $ENV{CPAN_UPLOADER_UPLOAD_URI}
+              || 'http://pause.perl.org/pause/authenquery';
 
 =method upload_file
 
@@ -37,8 +33,8 @@ Valid arguments are:
   user       - (required) your CPAN / PAUSE id
   password   - (required) your CPAN / PAUSE password
   subdir     - the directory (under your home directory) to upload to
-  http_proxy - url of the http proxy to use 
-  dpan_url   - the url of a possible DarkPAN to use instead of PAUSE
+  http_proxy - uri of the http proxy to use
+  upload_uri - uri of the upload handler; usually the default (PAUSE) is right
   debug      - if set to true, spew lots more debugging output
 
 This method attempts to actually upload the named file to the CPAN.  It will
@@ -65,7 +61,7 @@ sub upload_file {
       "The following arguments would have been used to upload: \n"
       . '$self: ' . Dumper($self)
       . '$file: ' . Dumper($file)
-    ); 
+    );
   } else {
     $self->_upload($file);
   }
@@ -91,10 +87,10 @@ sub _upload {
   $agent->env_proxy;
   $agent->proxy(http => $self->{http_proxy}) if $self->{http_proxy};
 
-  my $url = $self->{dpan_url} || $PAUSE_ADD_URI;
+  my $uri = $self->{upload_uri} || $UPLOAD_URI;
 
   my $request = POST(
-    $url,
+    $uri,
     Content_Type => 'form-data',
     Content      => {
       HIDDENNAME                        => $self->{user},
@@ -132,7 +128,7 @@ sub _upload {
     if ($response->code == RC_NOT_FOUND) {
       die "PAUSE's CGI for handling messages seems to have moved!\n",
         "(HTTP response code of 404 from the PAUSE web server)\n",
-        "It used to be: ", $PAUSE_ADD_URI, "\n",
+        "It used to be: ", $UPLOAD_URI, "\n",
         "Please inform the maintainer of $self.\n";
     } else {
       die "request failed with error code ", $response->code,
@@ -204,7 +200,7 @@ sub read_config_file {
     Carp::croak "multiple enties for $k" if $from_file{$k};
     $from_file{$k} = $v;
   }
-  
+
   return \%from_file;
 }
 

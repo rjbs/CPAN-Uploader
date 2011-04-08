@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          allow an alternate upload_uri via constructor arg or env var
 
 0.102150  2010-08-03 18:34:27 America/New_York
           allow automatic use of proxy from environment
