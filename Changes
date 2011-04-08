@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.103000  2011-04-07 22:05:13 America/New_York
           allow an alternate upload_uri via constructor arg or env var
 
 0.102150  2010-08-03 18:34:27 America/New_York
