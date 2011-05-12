@@ -172,8 +172,9 @@ sub new {
 This reads the config file and returns a hashref of its contents that can be
 used as configuration for CPAN::Uploader.
 
-If no filename is given, it looks for F<.pause> in the user's home directory
-(from the env var C<HOME>, or the current directory if C<HOME> isn't set).
+If no filename is given, it looks for F<.pause> in the current diectory, and if 
+that does not exist then looks for one in the user's home directory.
+(from the env var C<HOME>).
 
 =cut
 
@@ -181,10 +182,14 @@ sub read_config_file {
   my ($class, $filename) = @_;
 
   unless ($filename) {
-    my $home  = $ENV{HOME} || '.';
-    $filename = File::Spec->catfile($home, '.pause');
-
-    return {} unless -e $filename and -r _;
+    for my $dir ('.', $ENV{HOME}) {
+        # Skip if is undef (ie. home is not set) 
+        # or if we already have a filename
+        next unless ($dir || $filename);
+        my $file = File::Spec->catfile($dir, '.pause');
+        $filename = $file if (-e $file and -r _);
+    }
+    return {} unless $filename;
   }
 
   # Process .pause
