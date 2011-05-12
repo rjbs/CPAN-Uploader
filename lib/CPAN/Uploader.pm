@@ -185,7 +185,7 @@ sub read_config_file {
     for my $dir ('.', $ENV{HOME}) {
         # Skip if is undef (ie. home is not set) 
         # or if we already have a filename
-        next unless ($dir || $filename);
+        next if (not $dir || $filename);
         my $file = File::Spec->catfile($dir, '.pause');
         $filename = $file if (-e $file and -r _);
     }
