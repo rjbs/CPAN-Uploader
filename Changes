@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          ./.pauserc will now be consulted before ~/.pauserc (thanks, Alex
+          Kalderimis)
 
 0.103000  2011-04-07 22:05:13 America/New_York
           allow an alternate upload_uri via constructor arg or env var
