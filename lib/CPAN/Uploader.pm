@@ -75,11 +75,14 @@ sub _ua_string {
   return "$class/$version";
 }
 
+sub uri { shift->{upload_uri} || $UPLOAD_URI }
+sub target { shift->{target} || 'PAUSE' }
+
 sub _upload {
   my $self = shift;
   my $file = shift;
 
-  $self->log("registering upload with PAUSE web server");
+  $self->log("registering upload with " . $self->target . " web server");
 
   my $agent = LWP::UserAgent->new;
   $agent->agent( $self->_ua_string );
@@ -116,7 +119,7 @@ sub _upload {
   );
 
   # Make the request to the PAUSE web server
-  $self->log("POSTing upload for $file");
+  $self->log("POSTing upload for $file to $uri");
   my $response = $agent->request($request);
 
   # So, how'd we do?
@@ -127,8 +130,8 @@ sub _upload {
   if ($response->is_error) {
     if ($response->code == RC_NOT_FOUND) {
       die "PAUSE's CGI for handling messages seems to have moved!\n",
-        "(HTTP response code of 404 from the PAUSE web server)\n",
-        "It used to be: ", $UPLOAD_URI, "\n",
+        "(HTTP response code of 404 from the ", $self->target, " web server)\n",
+        "It used to be: ", $uri, "\n",
         "Please inform the maintainer of $self.\n";
     } else {
       die "request failed with error code ", $response->code,
@@ -142,7 +145,7 @@ sub _upload {
       "----- RESPONSE END -------\n"
     );
 
-    $self->log("PAUSE add message sent ok [" . $response->code . "]");
+    $self->log($self->target . " add message sent ok [" . $response->code . "]");
   }
 }
 
