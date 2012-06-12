@@ -20,7 +20,7 @@ use HTTP::Status;
 use LWP::UserAgent;
 
 my $UPLOAD_URI = $ENV{CPAN_UPLOADER_UPLOAD_URI}
-              || 'http://pause.perl.org/pause/authenquery';
+              || 'https://pause.perl.org/pause/authenquery';
 
 =method upload_file
 
