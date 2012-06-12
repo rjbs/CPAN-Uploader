@@ -193,21 +193,11 @@ sub read_config_file {
     return {} unless -e $filename and -r _;
   }
 
-  # Process .pause
-  open my $pauserc, '<', $filename
-    or die "can't open $filename for reading: $!";
+  require Config::Identity;
+  my %conf = Config::Identity->load($filename);
+  $conf{user} = delete $conf{username} unless $conf{user};
 
-  my %from_file;
-  while (<$pauserc>) {
-    chomp;
-    next unless $_ and $_ !~ /^\s*#/;
-
-    my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
-    Carp::croak "multiple enties for $k" if $from_file{$k};
-    $from_file{$k} = $v;
-  }
-
-  return \%from_file;
+  return \%conf;
 }
 
 =method log
