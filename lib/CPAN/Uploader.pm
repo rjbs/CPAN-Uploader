@@ -71,7 +71,7 @@ sub upload_file {
 sub _ua_string {
   my ($self) = @_;
   my $class   = ref $self || $self;
-  my $version = $class->VERSION;
+  my $version = defined $class->VERSION ? $class->VERSION : 'dev';
 
   return "$class/$version";
 }
