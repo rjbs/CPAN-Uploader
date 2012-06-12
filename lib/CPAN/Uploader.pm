@@ -42,7 +42,6 @@ raise an exception on error.
 
 =cut
 
-use Data::Dumper;
 sub upload_file {
   my ($self, $file, $arg) = @_;
 
@@ -56,11 +55,12 @@ sub upload_file {
   $self = $self->new($arg) if $arg;
 
   if ($arg->{dry_run}) {
+    require Data::Dumper;
     $self->log("By request, cowardly refusing to do anything at all.");
     $self->log(
       "The following arguments would have been used to upload: \n"
-      . '$self: ' . Dumper($self)
-      . '$file: ' . Dumper($file)
+      . '$self: ' . Data::Dumper::Dumper($self)
+      . '$file: ' . Data::Dumper::Dumper($file)
     );
   } else {
     $self->_upload($file);
