@@ -61,7 +61,7 @@ if ($opt->help) {
   exit;
 }
 
-die "Please provide a file name.\n" . $usage unless my $file = $ARGV[0];
+die "Please provide a file name.\n" . $usage unless @ARGV;
 
 $arg{user} = $opt->_specified('user') ? $opt->user : $from_file->{user};
 
@@ -94,7 +94,9 @@ if (! $arg{password}) {
   print "\n";
 }
 
-CPAN::Uploader->upload_file(
-  $file,
-  \%arg,
-);
+foreach my $file (@ARGV) {
+  CPAN::Uploader->upload_file(
+    $file,
+    \%arg,
+  );
+}
