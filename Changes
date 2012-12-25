@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          cpan-uploader now can take a list of filenames to upload (Thanks,
+          Gabor Szabo!)
 
 0.103001  2012-03-26 08:32:44 America/New_York
           Small fixes about upload_uri usage (Getty)

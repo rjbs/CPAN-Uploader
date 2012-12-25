@@ -10,7 +10,7 @@ use Getopt::Long::Descriptive 0.084;
 
 =head1 USAGE
 
-  usage: cpan-upload [options] file-to-upload
+  usage: cpan-upload [options] file-to-upload-1 [ file-to-upload-2 ... ]
     -v --verbose       enable verbose logging
     -h --help          display this help message
     --dry-run          do not actually upload anything
@@ -48,11 +48,11 @@ my ($opt, $usage) = describe_options(
 
   [ "verbose|v" => "enable verbose logging" ],
   [ "help|h"    => "display this help message" ],
-  [ "dry-run"   => "do not actually upload anything" ], 
+  [ "dry-run"   => "do not actually upload anything" ],
   [],
   [ "user|u=s"      => "your PAUSE username" ],
   [ "password|p=s"  => "the password to your PAUSE account" ],
-  [ "directory|d=s" => "a dir in your CPAN space in which to put the file" ],
+  [ "directory|d=s" => "a dir in your CPAN space in which to put the files" ],
   [ "http-proxy=s"  => "URL of the http proxy to use in uploading" ],
 );
 
@@ -61,7 +61,7 @@ if ($opt->help) {
   exit;
 }
 
-die "Please provide a file name.\n" . $usage unless @ARGV;
+die "Please provide at least one file name.\n" . $usage unless @ARGV;
 
 $arg{user} = $opt->_specified('user') ? $opt->user : $from_file->{user};
 
