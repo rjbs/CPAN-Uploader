@@ -178,6 +178,8 @@ used as configuration for CPAN::Uploader.
 If no filename is given, it looks for F<.pause> in the user's home directory
 (from the env var C<HOME>, or the current directory if C<HOME> isn't set).
 
+See L<cpan_upload/CONFIGURATION> for the config format.
+
 =cut
 
 sub read_config_file {
