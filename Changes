@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          use https by default (thanks, Mike Doherty)
 
 0.103002  2012-12-24 22:00:44 America/New_York
           cpan-uploader now can take a list of filenames to upload (Thanks,
