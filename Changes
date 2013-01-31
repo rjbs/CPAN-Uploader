@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.103003  2013-01-30 21:22:12 America/New_York
           use https by default (thanks, Mike Doherty)
 
 0.103002  2012-12-24 22:00:44 America/New_York
