@@ -3,6 +3,7 @@ use strict;
 use warnings;
 package
   cpan_upload;
+# PODNAME: cpan-upload
 # ABSTRACT: upload a distribution to the CPAN
 
 use CPAN::Uploader;
