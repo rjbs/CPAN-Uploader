@@ -2,6 +2,9 @@ Revision history for CPAN-Uploader
 
 {{$NEXT}}
 
+0.103006  2013-12-13 08:18:36 America/New_York
+          update bugtracker and repo metadata
+
 0.103005  2013-07-01 19:01:17 America/New_York
           Use Config::Identity to permit GPG-encrypting on-disk credentials
           (thanks, Mike Doherty)
