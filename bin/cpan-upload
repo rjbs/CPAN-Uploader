@@ -51,8 +51,6 @@ You can GnuPG-encrypt this file if you wish:
 
 my %arg;
 
-my $from_file = CPAN::Uploader->read_config_file;
-
 # This nonsensical hack is to cope with Module::Install wanting to call
 # cpan-upload -verbose; it should be made to use CPAN::Uploader instead.
 $ARGV[0] = '--verbose' if @ARGV == 2 and $ARGV[0] eq '-verbose';
@@ -69,12 +67,15 @@ my ($opt, $usage) = describe_options(
   [ "password|p=s"  => "the password to your PAUSE account" ],
   [ "directory|d=s" => "a dir in your CPAN space in which to put the files" ],
   [ "http-proxy=s"  => "URL of the http proxy to use in uploading" ],
+  [ "config|c=s"    => "config file to use; defaults to ~/.pause" ],
 );
 
 if ($opt->help) {
   print $usage->text;
   exit;
 }
+
+my $from_file = CPAN::Uploader->read_config_file($opt->config);
 
 die "Please provide at least one file name.\n" . $usage unless @ARGV;
 

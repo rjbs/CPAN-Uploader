@@ -186,7 +186,7 @@ See L<cpan_upload/CONFIGURATION> for the config format.
 sub read_config_file {
   my ($class, $filename) = @_;
 
-  unless ($filename) {
+  unless (defined $filename) {
     my $home  = File::HomeDir->my_home || '.';
     $filename = File::Spec->catfile($home, '.pause');
 
