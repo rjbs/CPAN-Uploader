@@ -2,6 +2,9 @@ Revision history for CPAN-Uploader
 
 {{$NEXT}}
 
+0.103007  2014-04-04 22:02:22-04:00 America/New_York
+        - added "-c" option to cpan-uploader to specify an alternate config
+
 0.103006  2013-12-13 08:18:36 America/New_York
           update bugtracker and repo metadata
 
