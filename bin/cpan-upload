@@ -15,11 +15,12 @@ use Getopt::Long::Descriptive 0.084;
     -v --verbose       enable verbose logging
     -h --help          display this help message
     --dry-run          do not actually upload anything
-                     
+
     -u --user          your PAUSE username
     -p --password      the password to your PAUSE account
     -d --directory     a dir in your CPAN space in which to put the file
     --http-proxy       URL of the http proxy to use in uploading
+    --ignore-errors    instead of aborting, continue to next file on error
 
 =head1 CONFIGURATION
 
@@ -67,6 +68,7 @@ my ($opt, $usage) = describe_options(
   [ "password|p=s"  => "the password to your PAUSE account" ],
   [ "directory|d=s" => "a dir in your CPAN space in which to put the files" ],
   [ "http-proxy=s"  => "URL of the http proxy to use in uploading" ],
+  [ "ignore-errors" => "instead of aborting, continue to next file on error" ],
   [ "config|c=s"    => "config file to use; defaults to ~/.pause" ],
 );
 
@@ -111,8 +113,14 @@ if (! $arg{password}) {
 }
 
 foreach my $file (@ARGV) {
-  CPAN::Uploader->upload_file(
-    $file,
-    \%arg,
-  );
+  eval {
+    CPAN::Uploader->upload_file(
+      $file,
+      \%arg,
+    );
+  };
+  if ($@) {
+    die unless $opt->ignore_errors;
+    warn;
+  }
 }
