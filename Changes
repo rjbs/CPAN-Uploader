@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+          Use Config::Identity to permit GPG-encrypting on-disk credentials (Mike Doherty)
 
 0.103008  2015-02-08 22:09:59-05:00 America/New_York
         - fix documentation link to cpan-upload/CONFIGURATION (Kent Fredric)
