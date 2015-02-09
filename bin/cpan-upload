@@ -113,14 +113,16 @@ if (! $arg{password}) {
 }
 
 foreach my $file (@ARGV) {
-  eval {
+  my $ok = eval {
     CPAN::Uploader->upload_file(
       $file,
       \%arg,
     );
+    1;
   };
-  if ($@) {
-    die unless $opt->ignore_errors;
-    warn;
+  unless ($ok) {
+    my $error = $@;
+    die $@ unless $opt->ignore_errors;
+    warn $@;
   }
 }
