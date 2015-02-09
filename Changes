@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.103008  2015-02-08 22:09:59-05:00 America/New_York
         - fix documentation link to cpan-upload/CONFIGURATION (Kent Fredric)
         - you can now "cpan-upload http://some.cool/file.tgz" (Barbie)
         - add --ignore-errors for cpan-upload (perlancar)
