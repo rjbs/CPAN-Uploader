@@ -93,18 +93,35 @@ sub _upload {
 
   my $uri = $self->{upload_uri} || $UPLOAD_URI;
 
-  my $request = POST(
-    $uri,
-    Content_Type => 'form-data',
-    Content      => {
-      HIDDENNAME                        => $self->{user},
+  my $type = 'form-data';
+  my %content = (
+    HIDDENNAME                        => $self->{user},
+    ($self->{subdir} ? (pause99_add_uri_subdirtext        => $self->{subdir}) : ()),
+  );
+
+  if ($file =~ m{^https?://}) {
+    $type = 'application/x-www-form-urlencoded';
+    %content = (
+      %content,
+      pause99_add_uri_httpupload        => '',
+      pause99_add_uri_uri               => $file,
+      SUBMIT_pause99_add_uri_uri        => " Upload this URL ",
+    );
+  } else {
+    %content = (
+      %content,
       CAN_MULTIPART                     => 1,
       pause99_add_uri_upload            => File::Basename::basename($file),
-      SUBMIT_pause99_add_uri_httpupload => " Upload this file from my disk ",
-      pause99_add_uri_uri               => "",
       pause99_add_uri_httpupload        => [ $file ],
-      ($self->{subdir} ? (pause99_add_uri_subdirtext => $self->{subdir}) : ()),
-    },
+      pause99_add_uri_uri               => '',
+      SUBMIT_pause99_add_uri_httpupload => " Upload this file from my disk ",
+    );
+  }
+
+  my $request = POST(
+    $uri,
+    Content_Type => $type,
+    Content      => \%content,
   );
 
   $request->authorization_basic($self->{user}, $self->{password});
