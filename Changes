@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+        - Do (minor) validation on the user in the config file (Mark Fowler)
 
 0.103009  2015-05-27 13:56:16-04:00 America/New_York
         - Do (minor) validation on the user in the config file (Mark Fowler)
