@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+        - Do (minor) validation on the user in the config file (Mark Fowler)
 
 0.103008  2015-02-08 22:09:59-05:00 America/New_York
         - fix documentation link to cpan-upload/CONFIGURATION (Kent Fredric)
