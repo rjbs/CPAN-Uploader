@@ -229,6 +229,12 @@ sub read_config_file {
     }
   }
 
+  # minimum validation of arguments
+  Carp::croak "Configured user has trailing whitespace"
+    if defined $conf{user} && $conf{user} =~ /\s$/;
+  Carp::croak "Configured user contains whitespace"
+    if defined $conf{user} && $conf{user} =~ /\s/;
+
   return \%conf;
 }
 
