@@ -32,7 +32,9 @@ username and password.  It should look like this:
   user EXAMPLE
   password your-secret-password
 
-You can GnuPG-encrypt this file if you wish:
+You can GnuPG-encrypt this file if you wish, but you must install
+L<Config::Identity> and configure your gpg-agent as L<Config::Identity>
+currently doesn't prompt for a password at decryption time:
 
     # Follow the prompts, setting your key as the "recipient"
     # Use ^D once you've finished typing out your authentication information
