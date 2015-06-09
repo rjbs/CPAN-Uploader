@@ -221,6 +221,11 @@ sub read_config_file {
 
     while (<$pauserc>) {
       chomp;
+      if (/BEGIN PGP MESSAGE/ ) {
+        Carp::croak "$filename seems to be encrypted. "
+          . "Maybe you need to install Config::Identity?"
+      }
+
       next unless $_ and $_ !~ /^\s*#/;
 
       my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
