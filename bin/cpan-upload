@@ -21,6 +21,7 @@ use Getopt::Long::Descriptive 0.084;
     -d --directory     a dir in your CPAN space in which to put the file
     --http-proxy       URL of the http proxy to use in uploading
     --ignore-errors    instead of aborting, continue to next file on error
+    --md5              compute MD5 checksums of the files
 
 =head1 CONFIGURATION
 
@@ -70,6 +71,7 @@ my ($opt, $usage) = describe_options(
   [ "http-proxy=s"  => "URL of the http proxy to use in uploading" ],
   [ "ignore-errors" => "instead of aborting, continue to next file on error" ],
   [ "config|c=s"    => "config file to use; defaults to ~/.pause" ],
+  [ "md5"           => "compute MD5 checksums of the files" ],
 );
 
 if ($opt->help) {
@@ -112,6 +114,8 @@ if (! $arg{password}) {
   print "\n";
 }
 
+my $md5;
+
 foreach my $file (@ARGV) {
   my $ok = eval {
     CPAN::Uploader->upload_file(
@@ -120,7 +124,26 @@ foreach my $file (@ARGV) {
     );
     1;
   };
-  unless ($ok) {
+  if ($ok) {
+    if ($opt->md5) {
+      if ($md5) {
+        $md5->reset;
+      } else {
+        require Digest::MD5;
+        $md5 = Digest::MD5->new;
+      }
+      open my $fh, '<', $file or die "can't open $file for reading: $!";
+      my $digest = do {
+        local $@;
+        eval {
+          $md5->addfile($fh)->hexdigest;
+        };
+      };
+      if (defined $digest) {
+        print "md5: $digest\n";
+      }
+    }
+  } else {
     my $error = $@;
     die $@ unless $opt->ignore_errors;
     warn $@;
