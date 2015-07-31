@@ -21,6 +21,7 @@ use Getopt::Long::Descriptive 0.084;
     -d --directory     a dir in your CPAN space in which to put the file
     --http-proxy       URL of the http proxy to use in uploading
     --ignore-errors    instead of aborting, continue to next file on error
+    -c --config        config file to use; defaults to ~/.pause
     --md5              compute MD5 checksums of the files
 
 =head1 CONFIGURATION
