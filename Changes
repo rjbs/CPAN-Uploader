@@ -2,6 +2,9 @@ Revision history for CPAN-Uploader
 
 {{$NEXT}}
 
+0.103010  2015-08-10 22:23:25-04:00 America/New_York
+        - add --md5 option to print md5sum of uploaded files (Vincent Pit)
+
 0.103009  2015-05-27 13:56:16-04:00 America/New_York
         - Do (minor) validation on the user in the config file (Mark Fowler)
 
