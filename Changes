@@ -2,6 +2,9 @@ Revision history for CPAN-Uploader
 
 {{$NEXT}}
 
+0.103011  2015-10-05 21:45:26-04:00 America/New_York
+        - document the availability of Config::Identity-based encrypted config
+
 0.103010  2015-08-10 22:23:25-04:00 America/New_York
         - add --md5 option to print md5sum of uploaded files (Vincent Pit)
 
