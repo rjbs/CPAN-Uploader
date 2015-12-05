@@ -112,7 +112,9 @@ if (! $arg{password}) {
   local $| = 1;
   print "PAUSE Password: ";
   Term::ReadKey::ReadMode('noecho');
-  chop($arg{password} = <STDIN>);
+  $arg{password} = <STDIN>;
+  chomp $arg{password}
+    if defined $arg{password};
   Term::ReadKey::ReadMode('restore');
   print "\n";
 }
