@@ -2,6 +2,9 @@ Revision history for CPAN-Uploader
 
 {{$NEXT}}
 
+0.103012  2015-12-31 21:41:09-05:00 America/New_York
+        - don't chomp undef (Graham Knop)
+
 0.103011  2015-10-05 21:45:26-04:00 America/New_York
         - document the availability of Config::Identity-based encrypted config
 
