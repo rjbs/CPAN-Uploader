@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.103013  2016-09-06 19:18:12-04:00 America/New_York
         - the cpan-uploader program now skips directories, while the
           upload_file method throws an exception on non-files; thanks to
           Vincent Pit for reporting the weird behavior when trying to upload a
