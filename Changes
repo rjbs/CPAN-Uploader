@@ -1,6 +1,10 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+        - the cpan-uploader program now skips directories, while the
+          upload_file method throws an exception on non-files; thanks to
+          Vincent Pit for reporting the weird behavior when trying to upload a
+          directory
 
 0.103012  2015-12-31 21:41:09-05:00 America/New_York
         - don't chomp undef (Graham Knop)

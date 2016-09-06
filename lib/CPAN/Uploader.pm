@@ -49,6 +49,8 @@ sub upload_file {
   Carp::confess(q{don't supply %arg when calling upload_file on an object})
     if $arg and ref $self;
 
+  Carp::confess(q{attempted to upload a non-file}) unless -f $file;
+
   # class call with no args is no good
   Carp::confess(q{need to supply %arg when calling upload_file from the class})
     if not (ref $self) and not $arg;

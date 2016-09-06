@@ -122,6 +122,11 @@ if (! $arg{password}) {
 my $md5;
 
 foreach my $file (@ARGV) {
+  unless (-f $file) {
+    warn "skipping non-file $file\n";
+    next;
+  }
+
   my $ok = eval {
     CPAN::Uploader->upload_file(
       $file,
