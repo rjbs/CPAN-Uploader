@@ -37,6 +37,8 @@ Valid arguments are:
   http_proxy - uri of the http proxy to use
   upload_uri - uri of the upload handler; usually the default (PAUSE) is right
   debug      - if set to true, spew lots more debugging output
+  retries    - number of retries to perform on upload failure
+  retry_delay- number of seconds to wait between retries
 
 This method attempts to actually upload the named file to the CPAN.  It will
 raise an exception on error.
@@ -66,7 +68,24 @@ sub upload_file {
       . '$file: ' . Data::Dumper::Dumper($file)
     );
   } else {
-    $self->_upload($file);
+    if ($self->{retries}) {
+      for my $retry (1..$self->{retries}) {
+        eval { $self->_upload($file) };
+        if ($@) {
+          if ($retry < $self->{retries}) {
+            $self->log("Upload failed, retrying #$retry ...");
+            sleep $self->{retry_delay} if $self->{retry_delay};
+            next;
+          } else {
+            die;
+          }
+        } else {
+          last;
+        }
+      }
+    } else {
+      $self->_upload($file);
+    }
   }
 }
 
