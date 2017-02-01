@@ -237,9 +237,13 @@ sub _parse_dot_pause {
 
     next unless $_ and $_ !~ /^\s*#/;
 
-    my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
-    Carp::croak "multiple enties for $k" if $conf{$k};
-    $conf{$k} = $v;
+    if (my ($k, $v) = /^\s*(\w+)\s+(.+)$/) {
+      Carp::croak "multiple enties for $k" if $conf{$k};
+      $conf{$k} = $v;
+    }
+    else {
+      Carp::croak qq#Line "$_" does not match the "key value" format.#;
+    }
   }
   return %conf;
 }
