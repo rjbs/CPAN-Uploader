@@ -218,7 +218,7 @@ sub _parse_dot_pause {
     next unless $_ and $_ !~ /^\s*#/;
 
     if (my ($k, $v) = /^\s*(\w+)\s+(.+)$/) {
-      Carp::croak "multiple enties for $k" if $conf{$k};
+      Carp::croak "multiple entries for $k" if $conf{$k};
       $conf{$k} = $v;
     }
     else {
