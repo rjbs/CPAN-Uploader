@@ -21,7 +21,7 @@ use LWP::UserAgent;
 use File::HomeDir;
 
 my $UPLOAD_URI = $ENV{CPAN_UPLOADER_UPLOAD_URI}
-              || 'https://pause.perl.org/pause/authenquery';
+              || 'https://pause.perl.org/pause/authenquery?ACTION=add_uri';
 
 =method upload_file
 
