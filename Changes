@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+
+0.103014  2020-06-07 13:40:36-04:00 America/New_York
         - add a --retries option to make multiple upload attempts in the face
           of a 500 error (thanks, PERLANCAR)
 
