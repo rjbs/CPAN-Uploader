@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+        - add a --retries option to make multiple upload attempts in the face
+          of a 500 error (thanks, PERLANCAR)
 
 0.103013  2016-09-06 19:18:12-04:00 America/New_York
         - the cpan-uploader program now skips directories, while the
