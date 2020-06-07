@@ -68,25 +68,15 @@ sub upload_file {
       . '$file: ' . Data::Dumper::Dumper($file)
     );
   } else {
-    if ($self->{retries}) {
-      for my $retry (1..$self->{retries}) {
-        eval { $self->_upload($file) };
-        my $err = $@;
-        if ($err) {
-          if ($err =~ /request failed with error code 5/ &&
-                  $retry < $self->{retries}) {
-            $self->log("Upload failed ($err), retrying #$retry ...");
-            sleep $self->{retry_delay} if $self->{retry_delay};
-            next;
-          } else {
-            die;
-          }
-        } else {
-          last;
-        }
+    my $tries = ($self->{retries} > 0) ? $self->{retries} + 1 : 1;
+
+    TRY: for my $try (1 .. $tries) {
+      last TRY if eval { $self->_upload($file); 1 };
+      die $@ unless $@ !~ /request failed with error code 5/;
+      if ($try <= $tries) {
+        $self->log("Upload failed ($@), will make attempt #$try ...");
+        sleep $self->{retry_delay} if $self->{retry_delay};
       }
-    } else {
-      $self->_upload($file);
     }
   }
 }
