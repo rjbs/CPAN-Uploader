@@ -31,14 +31,14 @@ my $UPLOAD_URI = $ENV{CPAN_UPLOADER_UPLOAD_URI}
 
 Valid arguments are:
 
-  user       - (required) your CPAN / PAUSE id
-  password   - (required) your CPAN / PAUSE password
-  subdir     - the directory (under your home directory) to upload to
-  http_proxy - uri of the http proxy to use
-  upload_uri - uri of the upload handler; usually the default (PAUSE) is right
-  debug      - if set to true, spew lots more debugging output
-  retries    - number of retries to perform on upload failure (5xx response)
-  retry_delay- number of seconds to wait between retries
+  user        - (required) your CPAN / PAUSE id
+  password    - (required) your CPAN / PAUSE password
+  subdir      - the directory (under your home directory) to upload to
+  http_proxy  - uri of the http proxy to use
+  upload_uri  - uri of the upload handler; usually the default (PAUSE) is right
+  debug       - if set to true, spew lots more debugging output
+  retries     - number of retries to perform on upload failure (5xx response)
+  retry_delay - number of seconds to wait between retries
 
 This method attempts to actually upload the named file to the CPAN.  It will
 raise an exception on error.
