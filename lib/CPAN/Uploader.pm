@@ -68,7 +68,7 @@ sub upload_file {
       . '$file: ' . Data::Dumper::Dumper($file)
     );
   } else {
-    my $tries = ($self->{retries} > 0) ? $self->{retries} + 1 : 1;
+    my $tries = ($self->{retries} || 0 > 0) ? $self->{retries} + 1 : 1;
 
     TRY: for my $try (1 .. $tries) {
       last TRY if eval { $self->_upload($file); 1 };
