@@ -74,9 +74,17 @@ sub upload_file {
     TRY: for my $try (1 .. $tries) {
       last TRY if eval { $self->_upload($file); 1 };
       die $@ unless $@ !~ /request failed with error code 5/;
+
       if ($try <= $tries) {
-        $self->log("Upload failed ($@), will make attempt #$try ...");
+        $self->log("Upload failed ($@)");
+        if ($tries and ($try < $tries)) {
+          my $next_try = $try + 1;
+          $self->log("Will make attempt #$next_try ...");
+        }
         sleep $self->{retry_delay} if $self->{retry_delay};
+      }
+      if ($try >= $tries) {
+        die "Definitively failed!";
       }
     }
   }
