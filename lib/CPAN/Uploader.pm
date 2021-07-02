@@ -18,7 +18,7 @@ use File::Spec;
 use HTTP::Request::Common qw(POST);
 use HTTP::Status;
 use LWP::UserAgent;
-use File::HomeDir;
+use File::Glob qw( bsd_glob );
 
 my $UPLOAD_URI = $ENV{CPAN_UPLOADER_UPLOAD_URI}
               || 'https://pause.perl.org/pause/authenquery?ACTION=add_uri';
@@ -218,8 +218,7 @@ sub read_config_file {
   my ($class, $filename) = @_;
 
   unless (defined $filename) {
-    my $home  = File::HomeDir->my_home || '.';
-    $filename = File::Spec->catfile($home, '.pause');
+    $filename = bsd_glob('~/.pause');
 
     return {} unless -e $filename and -r _;
   }
