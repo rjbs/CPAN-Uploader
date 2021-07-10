@@ -1,6 +1,8 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+        - update author contact info
+        - add policy on required versions of perl
 
 0.103015  2020-08-20 23:07:25-04:00 America/New_York
         - quiet a harmless warning
