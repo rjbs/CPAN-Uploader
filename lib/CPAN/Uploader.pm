@@ -214,6 +214,32 @@ See L<cpan-upload/CONFIGURATION> for the config format.
 
 =cut
 
+sub _parse_dot_pause {
+  my ($class, $filename) = @_;
+  my %conf;
+  open my $pauserc, '<', $filename
+    or die "can't open $filename for reading: $!";
+
+  while (<$pauserc>) {
+    chomp;
+    if (/BEGIN PGP MESSAGE/ ) {
+      Carp::croak "$filename seems to be encrypted. "
+      . "Maybe you need to install Config::Identity?"
+    }
+
+    next unless $_ and $_ !~ /^\s*#/;
+
+    if (my ($k, $v) = /^\s*(\w+)\s+(.+)$/) {
+      Carp::croak "multiple entries for $k" if $conf{$k};
+      $conf{$k} = $v;
+    }
+    else {
+      Carp::croak qq#Line "$_" does not match the "key value" format.#;
+    }
+  }
+  return %conf;
+}
+
 sub read_config_file {
   my ($class, $filename) = @_;
 
@@ -230,22 +256,7 @@ sub read_config_file {
     $conf{user} = delete $conf{username} unless $conf{user};
   }
   else { # Process .pause manually
-    open my $pauserc, '<', $filename
-      or die "can't open $filename for reading: $!";
-
-    while (<$pauserc>) {
-      chomp;
-      if (/BEGIN PGP MESSAGE/ ) {
-        Carp::croak "$filename seems to be encrypted. "
-          . "Maybe you need to install Config::Identity?"
-      }
-
-      next unless $_ and $_ !~ /^\s*#/;
-
-      my ($k, $v) = /^\s*(\w+)\s+(.+)$/;
-      Carp::croak "multiple enties for $k" if $conf{$k};
-      $conf{$k} = $v;
-    }
+    %conf = $class->_parse_dot_pause($filename);
   }
 
   # minimum validation of arguments
