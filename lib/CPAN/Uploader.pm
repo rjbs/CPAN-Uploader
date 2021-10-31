@@ -84,7 +84,7 @@ sub upload_file {
         sleep $self->{retry_delay} if $self->{retry_delay};
       }
       if ($try >= $tries) {
-        die "Definitively failed!";
+        die "Failed to upload and reached maximum retry count!\n";
       }
     }
   }
