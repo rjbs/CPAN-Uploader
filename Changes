@@ -3,6 +3,8 @@ Revision history for CPAN-Uploader
 {{$NEXT}}
         - update author contact info
         - add policy on required versions of perl
+        - drop prereq on File::HomeDir (thanks, Karen Etheridge)
+        - document the CPAN_UPLOADER_URI env var (thanks, Marcus Ramberg)
 
 0.103015  2020-08-20 23:07:25-04:00 America/New_York
         - quiet a harmless warning
