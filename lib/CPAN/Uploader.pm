@@ -18,10 +18,9 @@ use File::Spec;
 use HTTP::Request::Common qw(POST);
 use HTTP::Status;
 use LWP::UserAgent;
-use File::HomeDir;
 
 my $UPLOAD_URI = $ENV{CPAN_UPLOADER_UPLOAD_URI}
-              || 'https://pause.perl.org/pause/authenquery';
+              || 'https://pause.perl.org/pause/authenquery?ACTION=add_uri';
 
 =method upload_file
 
@@ -31,15 +30,18 @@ my $UPLOAD_URI = $ENV{CPAN_UPLOADER_UPLOAD_URI}
 
 Valid arguments are:
 
-  user       - (required) your CPAN / PAUSE id
-  password   - (required) your CPAN / PAUSE password
-  subdir     - the directory (under your home directory) to upload to
-  http_proxy - uri of the http proxy to use
-  upload_uri - uri of the upload handler; usually the default (PAUSE) is right
-  debug      - if set to true, spew lots more debugging output
+  user        - (required) your CPAN / PAUSE id
+  password    - (required) your CPAN / PAUSE password
+  subdir      - the directory (under your home directory) to upload to
+  http_proxy  - uri of the http proxy to use
+  upload_uri  - uri of the upload handler; usually the default (PAUSE) is right
+  debug       - if set to true, spew lots more debugging output
+  retries     - number of retries to perform on upload failure (5xx response)
+  retry_delay - number of seconds to wait between retries
 
 This method attempts to actually upload the named file to the CPAN.  It will
-raise an exception on error.
+raise an exception on error. c<upload_uri> can also be set through the ENV
+variable c<CPAN_UPLOADER_UPLOAD_URI>.
 
 =cut
 
@@ -66,7 +68,25 @@ sub upload_file {
       . '$file: ' . Data::Dumper::Dumper($file)
     );
   } else {
-    $self->_upload($file);
+    my $retries = $self->{retries} || 0;
+    my $tries = ($retries > 0) ? $retries + 1 : 1;
+
+    TRY: for my $try (1 .. $tries) {
+      last TRY if eval { $self->_upload($file); 1 };
+      die $@ unless $@ !~ /request failed with error code 5/;
+
+      if ($try <= $tries) {
+        $self->log("Upload failed ($@)");
+        if ($tries and ($try < $tries)) {
+          my $next_try = $try + 1;
+          $self->log("Will make attempt #$next_try ...");
+        }
+        sleep $self->{retry_delay} if $self->{retry_delay};
+      }
+      if ($try >= $tries) {
+        die "Failed to upload and reached maximum retry count!\n";
+      }
+    }
   }
 }
 
@@ -232,7 +252,9 @@ sub read_config_file {
   my ($class, $filename) = @_;
 
   unless (defined $filename) {
-    my $home  = File::HomeDir->my_home || '.';
+    my $home = $^O eq 'MSWin32' && "$]" < 5.016
+      ? $ENV{HOME} || $ENV{USERPROFILE}
+      : (<~>)[0];
     $filename = File::Spec->catfile($home, '.pause');
 
     return {} unless -e $filename and -r _;

@@ -2,6 +2,21 @@ Revision history for CPAN-Uploader
 
 {{$NEXT}}
 
+0.103016  2021-10-30 22:49:45-04:00 America/New_York
+        - update author contact info
+        - add policy on required versions of perl
+        - drop prereq on File::HomeDir (thanks, Karen Etheridge)
+        - document the CPAN_UPLOADER_URI env var (thanks, Marcus Ramberg)
+        - fix some text and behavior around reaching max retries (thansk,
+          Thibault DUPONCHELLE)
+
+0.103015  2020-08-20 23:07:25-04:00 America/New_York
+        - quiet a harmless warning
+
+0.103014  2020-06-07 13:40:36-04:00 America/New_York
+        - add a --retries option to make multiple upload attempts in the face
+          of a 500 error (thanks, PERLANCAR)
+
 0.103013  2016-09-06 19:18:12-04:00 America/New_York
         - the cpan-uploader program now skips directories, while the
           upload_file method throws an exception on non-files; thanks to
