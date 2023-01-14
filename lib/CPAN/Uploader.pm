@@ -242,7 +242,7 @@ sub _parse_dot_pause {
       $conf{$k} = $v;
     }
     else {
-      Carp::croak qq#Line "$_" does not match the "key value" format.#;
+      Carp::croak qq#Line $. ($_) does not match the "key value" format.#;
     }
   }
   return %conf;
