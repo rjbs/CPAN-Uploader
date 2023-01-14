@@ -21,10 +21,10 @@ EOF
     close ($out);
 
     my %conf;
-    eval
-    {
+    eval {
       %conf = CPAN::Uploader->_parse_dot_pause($filename);
     };
+
     my $err = $@;
     like ($err, qr#\A\QLine 4 (non_interactive) does not match the "key value" format.\E#,
       "Correct error on line without a value."
@@ -41,10 +41,10 @@ EOF
     close ($out);
 
     my %conf;
-    eval
-    {
+    eval {
       %conf = CPAN::Uploader->_parse_dot_pause($filename);
     };
+
     my $err = $@;
     like ($err, qr#\A\Qmultiple entries for user\E#,
       "Correct spelling",
