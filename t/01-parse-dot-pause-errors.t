@@ -1,8 +1,5 @@
-#!/usr/bin/perl
-
-use strict;
+use v5.12.0;
 use warnings;
-use autodie;
 
 use Test::More tests => 2;
 use File::Temp qw/ tempdir /;
