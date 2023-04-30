@@ -40,8 +40,8 @@ Valid arguments are:
   retry_delay - number of seconds to wait between retries
 
 This method attempts to actually upload the named file to the CPAN.  It will
-raise an exception on error. c<upload_uri> can also be set through the ENV
-variable c<CPAN_UPLOADER_UPLOAD_URI>.
+raise an exception on error. C<upload_uri> can also be set through the ENV
+variable C<CPAN_UPLOADER_UPLOAD_URI>.
 
 =cut
 
