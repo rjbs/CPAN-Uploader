@@ -1,6 +1,7 @@
 Revision history for CPAN-Uploader
 
 {{$NEXT}}
+        - tiny fix to some documentation formatting (thanks, Graham Knop)
 
 0.103018  2023-01-13 21:11:24-05:00 America/New_York
         - a bit of refactoring and testing of .pause parser (thanks, Shlomi
